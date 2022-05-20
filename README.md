@@ -1,6 +1,6 @@
 # Mattermost Online Simulator
 
-If ou can't stay online in Mattermost but have to, then just start this online simulator and that's done:)
+If you can't stay online in Mattermost but have to, then just start this online simulator and that's done:)
 
 You need Docker to use this tool. Install the Docker and just exec the following command:
 ```bash
