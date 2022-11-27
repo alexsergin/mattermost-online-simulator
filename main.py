@@ -42,11 +42,15 @@ with webdriver.Firefox(options=options) as driver:
         else:
             rand_stop_minute = int(end_minutes[0])
 
+    # Choosing browser version
+    view_in_browser_button = wait.until(
+        ec.element_to_be_clickable((By.CSS_SELECTOR, '.get-app__buttons .get-app__status:nth-child(2)'))).click()
+
     # Login
     logging.info('Logging in')
-    wait.until(ec.element_to_be_clickable((By.ID, 'loginId'))).send_keys(auth_login)
-    wait.until(ec.element_to_be_clickable((By.ID, 'loginPassword'))).send_keys(auth_password)
-    wait.until(ec.element_to_be_clickable((By.ID, 'loginButton'))).click()
+    wait.until(ec.element_to_be_clickable((By.ID, 'input_loginId'))).send_keys(auth_login)
+    wait.until(ec.element_to_be_clickable((By.ID, 'input_password-input'))).send_keys(auth_password)
+    wait.until(ec.element_to_be_clickable((By.ID, 'saveSetting'))).click()
 
     # Waiting for logged in
     while True:
