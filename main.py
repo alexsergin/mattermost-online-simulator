@@ -2,11 +2,14 @@ import logging
 import os
 import time
 from random import randrange
+from dotenv import load_dotenv
+from os.path import basename, dirname
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.service import DEFAULT_EXECUTABLE_PATH
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -19,8 +22,7 @@ def set_online_status(wait_driver: WebDriverWait):
 # Configure logging
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 
-options = Options()
-options.headless = True
+load_dotenv()
 
 workspace_url = os.getenv('WORKSPACE_URL')
 auth_login = os.getenv('AUTH_LOGIN')
@@ -29,9 +31,13 @@ end_hour = os.getenv('END_HOUR', None)
 if end_hour is not None:
     end_hour = int(end_hour)
 end_minutes = os.getenv('END_MINUTES', '0').split(':')
+is_local = os.getenv("LOCAL", "false").lower() == 'true'
 
 logging.info('Starting webdriver')
-with webdriver.Firefox(options=options) as driver:
+executable_path = f'{dirname(__file__)}/geckodriver' if is_local else DEFAULT_EXECUTABLE_PATH
+options = Options()
+options.headless = not is_local
+with webdriver.Firefox(options=options, executable_path=executable_path) as driver:
     wait = WebDriverWait(driver, 20)
     driver.get(workspace_url)
 
@@ -44,7 +50,7 @@ with webdriver.Firefox(options=options) as driver:
 
     # Choosing browser version
     view_in_browser_button = wait.until(
-        ec.element_to_be_clickable((By.CSS_SELECTOR, '.get-app__buttons .get-app__status:nth-child(2)'))).click()
+        ec.element_to_be_clickable((By.CSS_SELECTOR, '.get-app__buttons .btn:nth-child(2)'))).click()
 
     # Login
     logging.info('Logging in')

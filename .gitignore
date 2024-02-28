@@ -28,3 +28,4 @@ nbdist/
 geckodriver
 geckodriver.log
 venv
+.env
